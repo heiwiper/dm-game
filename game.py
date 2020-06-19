@@ -10,9 +10,9 @@ size = screenWidth, screenHeight = 648, 720
 screen = pygame.display.set_mode(size)
 
 # just the background image
-background = pygame.image.load('tiles/background.png')
+background = pygame.image.load('./assets/tiles/background.png')
 # where the objects hide the character
-foreground = pygame.image.load('tiles/foreground.png')
+foreground = pygame.image.load('./assets/tiles/foreground.png')
 
 # set title of the window
 pygame.display.set_caption("Data Mining Game")
@@ -21,78 +21,125 @@ pygame.display.set_caption("Data Mining Game")
 clock = pygame.time.Clock()
 
 #load then play music
-music = pygame.mixer.music.load("bgm.wav")
-pygame.mixer.music.play()
+music = pygame.mixer.music.load("./assets/sounds/bgm.wav")
+pygame.mixer.music.play(-1)
 
 # loading characters sprites
 # character_1
-character_1_walkup = [pygame.image.load('./sprites/character_1/U1.png'),
-                      pygame.image.load('./sprites/character_1/U2.png'),
-                      pygame.image.load('./sprites/character_1/U3.png'),
-                      pygame.image.load('./sprites/character_1/U4.png')]
-character_1_walkdown = [pygame.image.load('./sprites/character_1/D1.png'),
-                        pygame.image.load('./sprites/character_1/D2.png'),
-                        pygame.image.load('./sprites/character_1/D3.png'),
-                        pygame.image.load('./sprites/character_1/D4.png')]
-character_1_walkright = [pygame.image.load('./sprites/character_1/R1.png'),
-                         pygame.image.load('./sprites/character_1/R2.png'),
-                         pygame.image.load('./sprites/character_1/R3.png'),
-                         pygame.image.load('./sprites/character_1/R4.png')]
-character_1_walkleft = [pygame.image.load('./sprites/character_1/L1.png'),
-                        pygame.image.load('./sprites/character_1/L2.png'),
-                        pygame.image.load('./sprites/character_1/L3.png'),
-                        pygame.image.load('./sprites/character_1/L4.png')]
+character_1_walkup = [pygame.image.load('./assets/sprites/character_1/U1.png'),
+                      pygame.image.load('./assets/sprites/character_1/U2.png'),
+                      pygame.image.load('./assets/sprites/character_1/U3.png'),
+                      pygame.image.load('./assets/sprites/character_1/U4.png')]
+character_1_walkdown = [pygame.image.load('./assets/sprites/character_1/D1.png'),
+                        pygame.image.load('./assets/sprites/character_1/D2.png'),
+                        pygame.image.load('./assets/sprites/character_1/D3.png'),
+                        pygame.image.load('./assets/sprites/character_1/D4.png')]
+character_1_walkright = [pygame.image.load('./assets/sprites/character_1/R1.png'),
+                         pygame.image.load('./assets/sprites/character_1/R2.png'),
+                         pygame.image.load('./assets/sprites/character_1/R3.png'),
+                         pygame.image.load('./assets/sprites/character_1/R4.png')]
+character_1_walkleft = [pygame.image.load('./assets/sprites/character_1/L1.png'),
+                        pygame.image.load('./assets/sprites/character_1/L2.png'),
+                        pygame.image.load('./assets/sprites/character_1/L3.png'),
+                        pygame.image.load('./assets/sprites/character_1/L4.png')]
 #character_2
-character_2_walkup = [pygame.image.load('./sprites/character_2/U2.png'),
-                      pygame.image.load('./sprites/character_2/U2.png'),
-                      pygame.image.load('./sprites/character_2/U3.png'),
-                      pygame.image.load('./sprites/character_2/U4.png')]
-character_2_walkdown = [pygame.image.load('./sprites/character_2/D2.png'),
-                        pygame.image.load('./sprites/character_2/D2.png'),
-                        pygame.image.load('./sprites/character_2/D3.png'),
-                        pygame.image.load('./sprites/character_2/D4.png')]
-character_2_walkright = [pygame.image.load('./sprites/character_2/R2.png'),
-                         pygame.image.load('./sprites/character_2/R2.png'),
-                         pygame.image.load('./sprites/character_2/R3.png'),
-                         pygame.image.load('./sprites/character_2/R4.png')]
-character_2_walkleft = [pygame.image.load('./sprites/character_2/L2.png'),
-                        pygame.image.load('./sprites/character_2/L2.png'),
-                        pygame.image.load('./sprites/character_2/L3.png'),
-                        pygame.image.load('./sprites/character_2/L4.png')]
+character_2_walkup = [pygame.image.load('./assets/sprites/character_2/U2.png'),
+                      pygame.image.load('./assets/sprites/character_2/U2.png'),
+                      pygame.image.load('./assets/sprites/character_2/U3.png'),
+                      pygame.image.load('./assets/sprites/character_2/U4.png')]
+character_2_walkdown = [pygame.image.load('./assets/sprites/character_2/D2.png'),
+                        pygame.image.load('./assets/sprites/character_2/D2.png'),
+                        pygame.image.load('./assets/sprites/character_2/D3.png'),
+                        pygame.image.load('./assets/sprites/character_2/D4.png')]
+character_2_walkright = [pygame.image.load('./assets/sprites/character_2/R2.png'),
+                         pygame.image.load('./assets/sprites/character_2/R2.png'),
+                         pygame.image.load('./assets/sprites/character_2/R3.png'),
+                         pygame.image.load('./assets/sprites/character_2/R4.png')]
+character_2_walkleft = [pygame.image.load('./assets/sprites/character_2/L2.png'),
+                        pygame.image.load('./assets/sprites/character_2/L2.png'),
+                        pygame.image.load('./assets/sprites/character_2/L3.png'),
+                        pygame.image.load('./assets/sprites/character_2/L4.png')]
 #character_3
-character_3_walkup = [pygame.image.load('./sprites/character_3/U3.png'),
-                      pygame.image.load('./sprites/character_3/U2.png'),
-                      pygame.image.load('./sprites/character_3/U3.png'),
-                      pygame.image.load('./sprites/character_3/U4.png')]
-character_3_walkdown = [pygame.image.load('./sprites/character_3/D3.png'),
-                        pygame.image.load('./sprites/character_3/D2.png'),
-                        pygame.image.load('./sprites/character_3/D3.png'),
-                        pygame.image.load('./sprites/character_3/D4.png')]
-character_3_walkright = [pygame.image.load('./sprites/character_3/R3.png'),
-                         pygame.image.load('./sprites/character_3/R2.png'),
-                         pygame.image.load('./sprites/character_3/R3.png'),
-                         pygame.image.load('./sprites/character_3/R4.png')]
-character_3_walkleft = [pygame.image.load('./sprites/character_3/L3.png'),
-                        pygame.image.load('./sprites/character_3/L2.png'),
-                        pygame.image.load('./sprites/character_3/L3.png'),
-                        pygame.image.load('./sprites/character_3/L4.png')]
+character_3_walkup = [pygame.image.load('./assets/sprites/character_3/U3.png'),
+                      pygame.image.load('./assets/sprites/character_3/U2.png'),
+                      pygame.image.load('./assets/sprites/character_3/U3.png'),
+                      pygame.image.load('./assets/sprites/character_3/U4.png')]
+character_3_walkdown = [pygame.image.load('./assets/sprites/character_3/D3.png'),
+                        pygame.image.load('./assets/sprites/character_3/D2.png'),
+                        pygame.image.load('./assets/sprites/character_3/D3.png'),
+                        pygame.image.load('./assets/sprites/character_3/D4.png')]
+character_3_walkright = [pygame.image.load('./assets/sprites/character_3/R3.png'),
+                         pygame.image.load('./assets/sprites/character_3/R2.png'),
+                         pygame.image.load('./assets/sprites/character_3/R3.png'),
+                         pygame.image.load('./assets/sprites/character_3/R4.png')]
+character_3_walkleft = [pygame.image.load('./assets/sprites/character_3/L3.png'),
+                        pygame.image.load('./assets/sprites/character_3/L2.png'),
+                        pygame.image.load('./assets/sprites/character_3/L3.png'),
+                        pygame.image.load('./assets/sprites/character_3/L4.png')]
 #character_4
-character_4_walkup = [pygame.image.load('./sprites/character_4/U4.png'),
-                      pygame.image.load('./sprites/character_4/U2.png'),
-                      pygame.image.load('./sprites/character_4/U3.png'),
-                      pygame.image.load('./sprites/character_4/U4.png')]
-character_4_walkdown = [pygame.image.load('./sprites/character_4/D4.png'),
-                        pygame.image.load('./sprites/character_4/D2.png'),
-                        pygame.image.load('./sprites/character_4/D3.png'),
-                        pygame.image.load('./sprites/character_4/D4.png')]
-character_4_walkright = [pygame.image.load('./sprites/character_4/R4.png'),
-                         pygame.image.load('./sprites/character_4/R2.png'),
-                         pygame.image.load('./sprites/character_4/R3.png'),
-                         pygame.image.load('./sprites/character_4/R4.png')]
-character_4_walkleft = [pygame.image.load('./sprites/character_4/L4.png'),
-                        pygame.image.load('./sprites/character_4/L2.png'),
-                        pygame.image.load('./sprites/character_4/L3.png'),
-                        pygame.image.load('./sprites/character_4/L4.png')]
+character_4_walkup = [pygame.image.load('./assets/sprites/character_4/U4.png'),
+                      pygame.image.load('./assets/sprites/character_4/U2.png'),
+                      pygame.image.load('./assets/sprites/character_4/U3.png'),
+                      pygame.image.load('./assets/sprites/character_4/U4.png')]
+character_4_walkdown = [pygame.image.load('./assets/sprites/character_4/D4.png'),
+                        pygame.image.load('./assets/sprites/character_4/D2.png'),
+                        pygame.image.load('./assets/sprites/character_4/D3.png'),
+                        pygame.image.load('./assets/sprites/character_4/D4.png')]
+character_4_walkright = [pygame.image.load('./assets/sprites/character_4/R4.png'),
+                         pygame.image.load('./assets/sprites/character_4/R2.png'),
+                         pygame.image.load('./assets/sprites/character_4/R3.png'),
+                         pygame.image.load('./assets/sprites/character_4/R4.png')]
+character_4_walkleft = [pygame.image.load('./assets/sprites/character_4/L4.png'),
+                        pygame.image.load('./assets/sprites/character_4/L2.png'),
+                        pygame.image.load('./assets/sprites/character_4/L3.png'),
+                        pygame.image.load('./assets/sprites/character_4/L4.png')]
+
+right_arrow = pygame.image.load("./assets/gui/right_arrow.png")
+left_arrow = pygame.image.load("./assets/gui/left_arrow.png")
+center_transaction_bg = pygame.image.load("./assets/gui/center_transaction_background.png")
+right_transaction_bg = pygame.image.load("./assets/gui/right_transaction_background.png")
+left_transaction_bg = pygame.image.load("./assets/gui/left_transaction_background.png")
+
+biscuit = pygame.image.load("./assets/items/biscuit.png")
+burger = pygame.image.load("./assets/items/burger.png")
+cheese = pygame.image.load("./assets/items/cheese.png")
+chicken = pygame.image.load("./assets/items/chicken.png")
+chocolate = pygame.image.load("./assets/items/chocolate.png")
+croissant = pygame.image.load("./assets/items/croissant.png")
+egg = pygame.image.load("./assets/items/egg.png")
+fish = pygame.image.load("./assets/items/fish.png")
+fruits = pygame.image.load("./assets/items/fruits.png")
+honey = pygame.image.load("./assets/items/honey.png")
+icecream = pygame.image.load("./assets/items/icecream.png")
+meat = pygame.image.load("./assets/items/meat.png")
+medicine = pygame.image.load("./assets/items/medicine.png")
+milk = pygame.image.load("./assets/items/milk.png")
+mushroom = pygame.image.load("./assets/items/mushroom.png")
+pistachio = pygame.image.load("./assets/items/pistachio.png")
+pizza = pygame.image.load("./assets/items/pizza.png")
+shrimp = pygame.image.load("./assets/items/shrimp.png")
+soda = pygame.image.load("./assets/items/soda.png")
+sweets = pygame.image.load("./assets/items/sweets.png")
+vegetables = pygame.image.load("./assets/items/vegetables.png")
+
+known_transactions = [('chocolate', 'milk', 'croissant'),
+                      ('pizza', 'burger', 'icecream'),
+                      ('icecream', 'soda', 'pistachio'),
+                      ('pistachio', 'chocolate', 'honey'),
+                      ('fish', 'shrimp', 'sweets'), ('mushroom', 'medicine'),
+                      ('fruits', 'chicken', 'cheese', 'meat'),
+                      ('burger', 'icecream', 'pizza'),
+                      ('biscuit', 'milk', 'egg'), ('sweets', 'shrimp', 'fish'),
+                      ('chocolate', 'honey', 'pistachio'),
+                      ('medicine', 'mushroom'),
+                      ('pizza', 'burger', 'icecream'),
+                      ('biscuit', 'milk', 'egg'),
+                      ('honey', 'pistachio', 'chocolate'),
+                      ('croissant', 'chocolate', 'milk'),
+                      ('mushroom', 'medicine'),
+                      ('chocolate', 'milk', 'croissant')]
+
+known_transactions_counter = 0
 
 guessingGame = False
 
@@ -263,6 +310,7 @@ class Client(object):
 class Player(object):
     def __init__(self):
         self.score = 0
+
 
 def redrawGameWindow():
     # draws background, character then foreground
