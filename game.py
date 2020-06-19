@@ -141,7 +141,6 @@ known_transactions = [('chocolate', 'milk', 'croissant'),
 
 known_transactions_counter = 0
 
-guessingGame = False
 
 # paths
 path1 = [(280, 280), (180, 280), (180, 430), (180,120), (180, 280), (280, 280), (280, 230), (490, 230), (490, 400)]
@@ -178,7 +177,7 @@ class Client(object):
         self.step = 10
 
         # it tells if the client is still buying so that we can start the guessing game
-        self.finishedBuying = False
+        self.finishedShopping= False
 
         # frames index, helps to display sprites from 0 to 3
         self.walkCount = 0
@@ -211,7 +210,6 @@ class Client(object):
         if self.walkCount >= 4:
             self.walkCount = 0
 
-        # print("{} {} {} {}".format(self.up, self.down, self.right, self.left))
         if self.up:
             screen.blit(self.walkUp[self.walkCount], (self.x, self.y))
             self.walkCount += 1
@@ -235,11 +233,39 @@ class Client(object):
                 screen.blit(self.walkLeft[0], (self.x, self.y))
             else:
                 screen.blit(self.walkDown[0], (self.x, self.y))
-        # print(self.walkCount)
 
+    def do_shopping(self):
+        self.walk_through_path()
+        if (self.x, self.y) == (490, 400):
+            self.finishedShopping = True  # to launch the guessing game the next time in the main loop
+    # uses move_to to move to all the coordinates in a path one after the other until the path ends
+    def walk_through_path(self):
+        if self.path is not None:
+            if self.pathIndex < self.path.__len__():  # if the client didn't reach the end of the path (the counter)
+                self.move_to(*self.path[self.pathIndex])  # he moves to the next checkpoint
+                if (self.x, self.y) == (self.path[self.pathIndex]):  # if he actually reached the checkpoint
+                    self.pathIndex += 1
+                    # when the character arrives to the counter
+                    if self.pathIndex >= self.path.__len__() and not (self.x, self.y) == (280, 600):
+                        self.lastDirection = "down"  # to make the character look down when he arrives to the counter
+                        self.pathIndex = 0
+                    # when the character is walking through the exit path and he arrives to the the exit door
+                    elif (self.x, self.y) == (280, 600):
+                        self.pathIndex = 0
+
+    # uses the move_in_direction to move the character to a certain coordinates in the order right left down up
+    def move_to(self, x, y):
+        if x <= screenWidth and self.x < x:
+            self.move_in_direction("right")
+        elif x >= 0 and self.x > x:
+            self.move_in_direction("left")
+        elif y <= screenHeight and self.y < y:
+            self.move_in_direction("down")
+        elif y >= 0 and self.y > y:
+            self.move_in_direction("up")
+
+    # moves the character one step in a given direction
     def move_in_direction(self, direction):
-        # moves the character one step in a given direction
-
         if direction == "up" and self.y - self.step >= 0:
             self.up = True
             self.lastDirection = "up"
@@ -260,38 +286,8 @@ class Client(object):
             self.lastDirection = "left"
             self.x -= self.step
 
-    def move_to(self, x, y):
-        # uses the move_in_direction to move the character to a certain coordinates in the order right left down up
-
-        if x <= screenWidth and self.x < x:
-            self.move_in_direction("right")
-        elif x >= 0 and self.x > x:
-            self.move_in_direction("left")
-        elif y <= screenHeight and self.y < y:
-            self.move_in_direction("down")
-        elif y >= 0 and self.y > y:
-            self.move_in_direction("up")
-
-    def walk_through_path(self):
-        # uses move_to to move to all the coordinates in a path one after the other until the path ends
-
-        if self.path is not None:
-            if self.pathIndex < self.path.__len__():  # if the client didn't reach the end of the path (the counter)
-                self.move_to(*self.path[self.pathIndex])  # he moves to the next checkpoint
-                if (self.x, self.y) == (self.path[self.pathIndex]):  # if he actually reached the checkpoint
-                    self.pathIndex += 1
-                    # when the character arrives to the counter
-                    if self.pathIndex >= self.path.__len__() and not (self.x, self.y) == (280, 600):
-                        self.lastDirection = "down"  # to make the character look down when he arrives to the counter
-                        self.pathIndex = 0
-                        self.finishedBuying = True  # to launch the guessing game the next time in the main loop
-                    # when the character is walking through the exit path and he arrives to the the exit door
-                    elif (self.x, self.y) == (280, 600):
-                        self.pathIndex = 0
-
+    # moves the character from the counter to the exit door
     def leave_store(self):
-        # moves the character from the counter to the exit door
-
         if exitPath is not None:
             if self.pathIndex < exitPath.__len__():
                 self.move_to(*exitPath[self.pathIndex])
@@ -311,13 +307,75 @@ class Player(object):
     def __init__(self):
         self.score = 0
 
+class Transaction(object):
+    def __init__(self):
+        self.itemsList = self.generate_items()
+        if self.itemsList is not None:
+            known_transactions_counter += 1
+    def generate_items(self):
+        if known_transactions_counter < known_transactions.__len__():
+            return known_transactions[known_transactions_counter]
+        else:
+            return None
+    def draw(self, row):
+        screen.blit(left_transaction_bg, 0, y)
+        for i in range(0, self.itemsList.__len__()-1):
+            screen.blit(center_transaction_bg, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            draw_item(i, row)
+        screen.blit(right_transaction_bg, left_transaction_bg.width + self.itemsList.__len__()*center_transaction_bg, y)
+    def draw_item(self, index, row):
+        if self.itemsList[i] is "biscuit":
+            screen.blit(biscuit, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "burger":
+            screen.blit(burger, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "cheese":
+            screen.blit(cheese, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "chicken":
+            screen.blit(chicken, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "chocolate":
+            screen.blit(chocolate, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "croissant":
+            screen.blit(croissant, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "egg":
+            screen.blit(egg, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "fish":
+            screen.blit(fish, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "fruits":
+            screen.blit(fruits, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "honoy":
+            screen.blit(honey, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "icecream":
+            screen.blit(icecream, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "meat":
+            screen.blit(meat, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "medicine":
+            screen.blit(medicine, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "milk":
+            screen.blit(milk, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "mushroom":
+            screen.blit(mushroom, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "pistachio":
+            screen.blit(pistachio, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "pizza":
+            screen.blit(pizza, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "shrimp":
+            screen.blit(shrimp, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "soda":
+            screen.blit(soda, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "sweets":
+            screen.blit(sweets, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+        elif self.itemsList[i] is "vegetables":
+            screen.blit(vegetables, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+
+
 
 def redrawGameWindow():
     # draws background, character then foreground
 
     clock.tick(20)
     screen.blit(background, (0, 0))
-    client.draw()
+    if client is not None:
+        client.draw()
     screen.blit(foreground, (0, 0))
     # Guessing game drawing should be here to come on top of the rest
     pygame.display.update()
@@ -327,6 +385,8 @@ def guessing_game():
     # this function should have the code of the guessing game which will set gessingGame to False when finishing
 
     global client
+    global shopping
+    global guessingGame
 
     # guessing game code should be here
     # when drawing something do it in the redrawGameWindow() and put it right before the update function call
@@ -335,10 +395,24 @@ def guessing_game():
     client.leave_store()  # delete this after adding guessing_game code and add it when the guessing game finishes
     if (client.x, client.y) == (280, 600):
         client = None  # to generate a new client and set a new path for him
-        client = Client()
+        guessingGame = False
+        shopping = True
+        print("done")
 
 
-client = Client()
+def display_known_transactions():
+    i = 0
+    while i < known_transactions.__len__():
+        transaction = Transaction(known_transactions[i])
+        transaction.draw(i%3)
+        i += 3
+
+
+client = None
+
+mainMenu = False
+shopping = True
+guessingGame = False
 
 # main loop
 run = True
@@ -349,18 +423,26 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    if client is None:
-        client = Client()
+    if mainMenu:
+        print("Main menu")
+    elif shopping:
+        if client is None:
+            client = Client()
+            print("generated new client")
+        else:
+            client.clear_directions()
 
-    if not client.finishedBuying:
-        client.walk_through_path()
+        if not client.finishedShopping:
+            client.do_shopping()
 
-    elif client.finishedBuying:
+        else:
+            shopping = False
+            guessingGame = True
+    elif guessingGame:
         guessing_game()
 
     redrawGameWindow()
 
-    client.clear_directions()
 
 # leave the game
 pygame.quit()
