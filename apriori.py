@@ -190,5 +190,4 @@ for id_unknown_transaction in range(0,len(unknown_transactions)):
     else :
         enchainement_algo = True
 
-    print("Le score de l'algo :", score_algo)
-    print("____________________\n")
+    print("test !")
