@@ -412,13 +412,13 @@ def reading_data(difficulty):
     global known_transactions
     global unknown_transactions
     # reading data from the known_transactions.txt
-    with open('difficulty\\'+difficulty+'\\known_transactions.txt') as f:
+    with open('difficulty/'+difficulty+'/known_transactions.txt') as f:
         known_transactions_text = [line.rstrip('\n') for line in f] # transactions but with ','
         for i in range(0, len(known_transactions_text)):
             known_transactions.append(known_transactions_text[i].split(','))
     random.shuffle(known_transactions) #Randomly mix the transactions
     # reading data from the unknown_transactions.txt
-    with open('difficulty\\'+difficulty+'\\known_transactions.txt') as f:
+    with open('difficulty/'+difficulty+'/known_transactions.txt') as f:
         unknown_transactions_text = [line.rstrip('\n') for line in f] # transactions but with ','
         for i in range(0, len(unknown_transactions_text)):
             unknown_transactions.append(unknown_transactions_text[i].split(','))
@@ -660,7 +660,7 @@ score_is_calculated = False
 # first window loop
 begin_game = False
 while begin_game == False:
-    background2 = pygame.image.load('tiles/background2.png')
+    background2 = pygame.image.load('assets/tiles/background2.png')
     screen.blit(background2, (0, 0))
     pygame.display.update()
     for event in pygame.event.get():
@@ -707,7 +707,6 @@ while run:
         while i < known_transactions.__len__():
             transaction = Transaction(known_transactions[i])
             transactionsList.append(transaction)
-            print(known_transactions[i])
             i += 1
 
         mainMenu = False
