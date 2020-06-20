@@ -96,9 +96,12 @@ character_4_walkleft = [pygame.image.load('./assets/sprites/character_4/L4.png')
 
 right_arrow = pygame.image.load("./assets/gui/right_arrow.png")
 left_arrow = pygame.image.load("./assets/gui/left_arrow.png")
+arrowWidth = 14
 center_transaction_bg = pygame.image.load("./assets/gui/center_transaction_background.png")
 right_transaction_bg = pygame.image.load("./assets/gui/right_transaction_background.png")
 left_transaction_bg = pygame.image.load("./assets/gui/left_transaction_background.png")
+startingGame_bg = pygame.image.load("./assets/gui/transactions_screen.png")
+transaction_bgWidth = 80
 
 biscuit = pygame.image.load("./assets/items/biscuit.png")
 burger = pygame.image.load("./assets/items/burger.png")
@@ -249,9 +252,6 @@ class Client(object):
                     if self.pathIndex >= self.path.__len__() and not (self.x, self.y) == (280, 600):
                         self.lastDirection = "down"  # to make the character look down when he arrives to the counter
                         self.pathIndex = 0
-                    # when the character is walking through the exit path and he arrives to the the exit door
-                    elif (self.x, self.y) == (280, 600):
-                        self.pathIndex = 0
 
     # uses the move_in_direction to move the character to a certain coordinates in the order right left down up
     def move_to(self, x, y):
@@ -308,64 +308,65 @@ class Player(object):
         self.score = 0
 
 class Transaction(object):
-    def __init__(self):
-        self.itemsList = self.generate_items()
-        if self.itemsList is not None:
-            known_transactions_counter += 1
+    def __init__(self, itemsList):
+        # self.itemsList = self.generate_items()
+        self.itemsList = itemsList
+        # if self.itemsList is not None:
+        #     known_transactions_counter += 1
     def generate_items(self):
         if known_transactions_counter < known_transactions.__len__():
             return known_transactions[known_transactions_counter]
         else:
             return None
     def draw(self, row):
-        screen.blit(left_transaction_bg, 0, y)
-        for i in range(0, self.itemsList.__len__()-1):
-            screen.blit(center_transaction_bg, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
-            draw_item(i, row)
-        screen.blit(right_transaction_bg, left_transaction_bg.width + self.itemsList.__len__()*center_transaction_bg, y)
-    def draw_item(self, index, row):
+        screen.blit(left_transaction_bg, (0, row*130))
+        for i in range(0, self.itemsList.__len__()):
+            screen.blit(center_transaction_bg, (transaction_bgWidth*(i+1), row*130))
+            self.draw_item(i, row)
+        screen.blit(right_transaction_bg, (transaction_bgWidth*(self.itemsList.__len__()+1), row*130))
+    def draw_item(self, i, row):
         if self.itemsList[i] is "biscuit":
-            screen.blit(biscuit, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(biscuit, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "burger":
-            screen.blit(burger, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(burger, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "cheese":
-            screen.blit(cheese, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(cheese, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "chicken":
-            screen.blit(chicken, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(chicken, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "chocolate":
-            screen.blit(chocolate, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(chocolate, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "croissant":
-            screen.blit(croissant, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(croissant, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "egg":
-            screen.blit(egg, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(egg, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "fish":
-            screen.blit(fish, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(fish, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "fruits":
-            screen.blit(fruits, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
-        elif self.itemsList[i] is "honoy":
-            screen.blit(honey, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(fruits, (transaction_bgWidth*(i + 1) , row*130))
+        elif self.itemsList[i] is "honey":
+            screen.blit(honey, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "icecream":
-            screen.blit(icecream, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(icecream, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "meat":
-            screen.blit(meat, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(meat, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "medicine":
-            screen.blit(medicine, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(medicine, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "milk":
-            screen.blit(milk, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(milk, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "mushroom":
-            screen.blit(mushroom, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(mushroom, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "pistachio":
-            screen.blit(pistachio, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(pistachio, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "pizza":
-            screen.blit(pizza, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(pizza, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "shrimp":
-            screen.blit(shrimp, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(shrimp, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "soda":
-            screen.blit(soda, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(soda, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "sweets":
-            screen.blit(sweets, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(sweets, (transaction_bgWidth*(i + 1) , row*130))
         elif self.itemsList[i] is "vegetables":
-            screen.blit(vegetables, i*center_transaction_bg.width + left_transaction_bg.width , row*130)
+            screen.blit(vegetables, (transaction_bgWidth*(i + 1) , row*130))
 
 
 
@@ -374,12 +375,28 @@ def redrawGameWindow():
 
     clock.tick(20)
     screen.blit(background, (0, 0))
-    if client is not None:
-        client.draw()
-    screen.blit(foreground, (0, 0))
+    if shopping or guessingGame:
+        if client is not None:
+            client.draw()
+        screen.blit(foreground, (0, 0))
+
     # Guessing game drawing should be here to come on top of the rest
+
+    if startingGame:
+        screen.blit(startingGame_bg, (0, 0))
+        display_known_transactions(knownTransactionsIndex)
+        screen.blit(left_arrow, (screenWidth/2-(arrowWidth+3), screenHeight - 30))
+        screen.blit(right_arrow, (screenWidth/2+3, screenHeight - 30))
+
     pygame.display.update()
     clock.tick(30)
+
+def display_known_transactions(index):
+    for i in range(0,TRANSACTIONS_PER_PAGE):
+        if i+index*TRANSACTIONS_PER_PAGE < known_transactions.__len__():
+            transactionsList[i+index*TRANSACTIONS_PER_PAGE].draw(i)
+        else:
+            break
 
 def guessing_game():
     # this function should have the code of the guessing game which will set gessingGame to False when finishing
@@ -397,22 +414,18 @@ def guessing_game():
         client = None  # to generate a new client and set a new path for him
         guessingGame = False
         shopping = True
-        print("done")
-
-
-def display_known_transactions():
-    i = 0
-    while i < known_transactions.__len__():
-        transaction = Transaction(known_transactions[i])
-        transaction.draw(i%3)
-        i += 3
 
 
 client = None
 
-mainMenu = False
-shopping = True
+mainMenu = True
+startingGame = False
+shopping = False
 guessingGame = False
+
+transactionsList = []
+knownTransactionsIndex = 0
+TRANSACTIONS_PER_PAGE = 4
 
 # main loop
 run = True
@@ -425,10 +438,30 @@ while run:
 
     if mainMenu:
         print("Main menu")
+        i = 0
+        while i < known_transactions.__len__():
+            transaction = Transaction(known_transactions[i])
+            transactionsList.append(transaction)
+            i += 1
+
+        mainMenu = False
+        startingGame = True
+    elif startingGame:
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_RIGHT] and (knownTransactionsIndex+1) * TRANSACTIONS_PER_PAGE < known_transactions.__len__():
+            knownTransactionsIndex += 1
+
+        elif keys[pygame.K_LEFT] and knownTransactionsIndex > 0:
+            knownTransactionsIndex -= 1
+
+        elif keys[pygame.K_SPACE]:
+            startingGame = False
+            shopping = True
+
     elif shopping:
         if client is None:
             client = Client()
-            print("generated new client")
         else:
             client.clear_directions()
 
