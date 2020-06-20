@@ -1,27 +1,8 @@
 from efficient_apriori import apriori
 import re
 class Apriori :
-    def __init__(self):
-        self.known_transactions =[
-        ('chocolate','milk','croissant'),
-        ('pizza','burger','icecream'),
-        ('icecream','soda','pistachio'),
-        ('pistachio','chocolate','honey'),
-        ('fish','shrimp','sweets'),
-        ('mushroom','medicine'),
-        ('fruits','chicken','cheese','meat'),
-        ('burger','icecream','pizza'),
-        ('biscuit','milk','egg'),
-        ('sweets','shrimp','fish'),
-        ('chocolate','honey','pistachio'),
-        ('medicine','mushroom'),
-        ('pizza','burger','icecream'),
-        ('biscuit','milk','egg'),
-        ('honey','pistachio','chocolate'),
-        ('croissant','chocolate','milk'),
-        ('mushroom','medicine'),
-        ('chocolate','milk','croissant')
-        ]
+    def __init__(self, known_transactions):
+        self.known_transactions = known_transactions
 
     def get_rules(self):
         itemsets, rules = apriori(self.known_transactions, min_support=0.1, min_confidence=1)
@@ -34,6 +15,3 @@ class Apriori :
             antecedents.append(antecedent.group(1).split(", "))
             consequents.append(consequent.group(1).split(", "))
         return antecedents, consequents
-
-    def get_known_transactions(self):
-        return self.known_transactions
