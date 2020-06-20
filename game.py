@@ -577,25 +577,25 @@ def draw_choice():
         str = 'assets/items/'+known_objects[i]+'.png'
         image_known_objects = pygame.image.load(str)
         if i>=2 :
-            screen.blit(image_known_objects, (295, 170+70*(i-2)))
+            screen.blit(image_known_objects, (310, 180+70*(i-2)))
         else :
-            screen.blit(image_known_objects, (225, 170+70*i))
+            screen.blit(image_known_objects, (240, 180+70*i))
     # put the objects in the second bubble
     for i in range(0, len(choices[0])):
         str = 'assets/items/'+choices[0][i]+'.png'
         image_known_objects = pygame.image.load(str)
         if i>=2 :
-            screen.blit(image_known_objects, (440, 390+70*(i-2)))
+            screen.blit(image_known_objects, (455, 400+70*(i-2)))
         else :
-            screen.blit(image_known_objects, (370, 390+70*i))
+            screen.blit(image_known_objects, (385, 400+70*i))
     # put the objects in the third bubble
     for i in range(0, len(choices[1])):
         str = 'assets/items/'+choices[1][i]+'.png'
         image_known_objects = pygame.image.load(str)
         if i>=2 :
-            screen.blit(image_known_objects, (140, 390+70*(i-2)))
+            screen.blit(image_known_objects, (155, 400+70*(i-2)))
         else :
-            screen.blit(image_known_objects, (70, 390+70*i))
+            screen.blit(image_known_objects, (85, 400+70*i))
 
 def guessing_game():
     global client
