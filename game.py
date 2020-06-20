@@ -100,12 +100,12 @@ character_4_walkleft = [pygame.image.load('./assets/sprites/character_4/L4.png')
 
 right_arrow = pygame.image.load("./assets/gui/right_arrow.png")
 left_arrow = pygame.image.load("./assets/gui/left_arrow.png")
-arrowWidth = 14
+arrowWidth = 50
 center_transaction_bg = pygame.image.load("./assets/gui/center_transaction_background.png")
 right_transaction_bg = pygame.image.load("./assets/gui/right_transaction_background.png")
 left_transaction_bg = pygame.image.load("./assets/gui/left_transaction_background.png")
 startingGame_bg = pygame.image.load("./assets/gui/transactions_screen.png")
-transaction_bgWidth = 80
+transaction_bgWidth = 60
 
 biscuit = pygame.image.load("./assets/items/biscuit.png")
 burger = pygame.image.load("./assets/items/burger.png")
@@ -128,23 +128,6 @@ shrimp = pygame.image.load("./assets/items/shrimp.png")
 soda = pygame.image.load("./assets/items/soda.png")
 sweets = pygame.image.load("./assets/items/sweets.png")
 vegetables = pygame.image.load("./assets/items/vegetables.png")
-
-known_transactions = [('chocolate', 'milk', 'croissant'),
-                      ('pizza', 'burger', 'icecream'),
-                      ('icecream', 'soda', 'pistachio'),
-                      ('pistachio', 'chocolate', 'honey'),
-                      ('fish', 'shrimp', 'sweets'), ('mushroom', 'medicine'),
-                      ('fruits', 'chicken', 'cheese', 'meat'),
-                      ('burger', 'icecream', 'pizza'),
-                      ('biscuit', 'milk', 'egg'), ('sweets', 'shrimp', 'fish'),
-                      ('chocolate', 'honey', 'pistachio'),
-                      ('medicine', 'mushroom'),
-                      ('pizza', 'burger', 'icecream'),
-                      ('biscuit', 'milk', 'egg'),
-                      ('honey', 'pistachio', 'chocolate'),
-                      ('croissant', 'chocolate', 'milk'),
-                      ('mushroom', 'medicine'),
-                      ('chocolate', 'milk', 'croissant')]
 
 known_transactions_counter = 0
 
@@ -313,64 +296,61 @@ class Player(object):
 
 class Transaction(object):
     def __init__(self, itemsList):
-        # self.itemsList = self.generate_items()
         self.itemsList = itemsList
-        # if self.itemsList is not None:
-        #     known_transactions_counter += 1
-    def generate_items(self):
-        if known_transactions_counter < known_transactions.__len__():
-            return known_transactions[known_transactions_counter]
-        else:
-            return None
+        self.rowHeight = 120
     def draw(self, row):
-        screen.blit(left_transaction_bg, (0, row*130))
+        screen.blit(left_transaction_bg, (0, row*self.rowHeight))
         for i in range(0, self.itemsList.__len__()):
-            screen.blit(center_transaction_bg, (transaction_bgWidth*(i+1), row*130))
+            screen.blit(center_transaction_bg, (transaction_bgWidth*(i+1), row*self.rowHeight))
             self.draw_item(i, row)
-        screen.blit(right_transaction_bg, (transaction_bgWidth*(self.itemsList.__len__()+1), row*130))
+        screen.blit(right_transaction_bg, (transaction_bgWidth*(self.itemsList.__len__()+1), row*self.rowHeight))
     def draw_item(self, i, row):
-        if self.itemsList[i] is "biscuit":
-            screen.blit(biscuit, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "burger":
-            screen.blit(burger, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "cheese":
-            screen.blit(cheese, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "chicken":
-            screen.blit(chicken, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "chocolate":
-            screen.blit(chocolate, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "croissant":
-            screen.blit(croissant, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "egg":
-            screen.blit(egg, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "fish":
-            screen.blit(fish, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "fruits":
-            screen.blit(fruits, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "honey":
-            screen.blit(honey, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "icecream":
-            screen.blit(icecream, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "meat":
-            screen.blit(meat, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "medicine":
-            screen.blit(medicine, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "milk":
-            screen.blit(milk, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "mushroom":
-            screen.blit(mushroom, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "pistachio":
-            screen.blit(pistachio, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "pizza":
-            screen.blit(pizza, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "shrimp":
-            screen.blit(shrimp, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "soda":
-            screen.blit(soda, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "sweets":
-            screen.blit(sweets, (transaction_bgWidth*(i + 1) , row*130))
-        elif self.itemsList[i] is "vegetables":
-            screen.blit(vegetables, (transaction_bgWidth*(i + 1) , row*130))
+        font = pygame.font.SysFont('Arial', 18)
+        text = font.render(self.itemsList[i], False, (255,255,255))
+        text_rect = text.get_rect()
+        screen.blit(text, ((2*transaction_bgWidth*(i + 1) +transaction_bgWidth)/2 - text_rect.width/2, row*self.rowHeight + 65))
+        if self.itemsList[i] == "biscuit":
+            screen.blit(biscuit, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "burger":
+            screen.blit(burger, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "cheese":
+            screen.blit(cheese, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "chicken":
+            screen.blit(chicken, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "chocolate":
+            screen.blit(chocolate, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "croissant":
+            screen.blit(croissant, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "egg":
+            screen.blit(egg, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "fish":
+            screen.blit(fish, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "fruits":
+            screen.blit(fruits, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "honey":
+            screen.blit(honey, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "icecream":
+            screen.blit(icecream, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "meat":
+            screen.blit(meat, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "medicine":
+            screen.blit(medicine, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "milk":
+            screen.blit(milk, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "mushroom":
+            screen.blit(mushroom, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "pistachio":
+            screen.blit(pistachio, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "pizza":
+            screen.blit(pizza, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "shrimp":
+            screen.blit(shrimp, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "soda":
+            screen.blit(soda, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "sweets":
+            screen.blit(sweets, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
+        elif self.itemsList[i] == "vegetables":
+            screen.blit(vegetables, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
 
 
 # returns the number of common elements between two arrays
@@ -443,13 +423,19 @@ def redrawGameWindow():
     if startingGame:
         screen.blit(startingGame_bg, (0, 0))
         display_known_transactions(knownTransactionsIndex)
-        screen.blit(left_arrow, (screenWidth/2-(arrowWidth+3), screenHeight - 30))
-        screen.blit(right_arrow, (screenWidth/2+3, screenHeight - 30))
 
     pygame.display.update()
     clock.tick(30)
 
 def display_known_transactions(index):
+    font = pygame.font.SysFont('Arial', 30)
+    text = font.render("Appuyez sur 'Espace' quand vous serai pret", False, (255,255,255))
+    text_rect = text.get_rect()
+    screen.blit(text, ((screenWidth/2 - text_rect.width/2, screenHeight - 100)))
+    if not knownTransactionsIndex == 0:
+        screen.blit(left_arrow, (screenWidth/2-(arrowWidth+3), screenHeight - 50))
+    if (knownTransactionsIndex+1) * TRANSACTIONS_PER_PAGE < known_transactions.__len__():
+        screen.blit(right_arrow, (screenWidth/2+3, screenHeight - 50))
     for i in range(0,TRANSACTIONS_PER_PAGE):
         if i+index*TRANSACTIONS_PER_PAGE < known_transactions.__len__():
             transactionsList[i+index*TRANSACTIONS_PER_PAGE].draw(i)
@@ -619,16 +605,6 @@ def guessing_game():
             shopping = True
 
 
-client = None
-
-mainMenu = False
-startingGame = False
-shopping = True
-guessingGame = False
-
-transactionsList = []
-knownTransactionsIndex = 0
-TRANSACTIONS_PER_PAGE = 4
 
 num_transaction = 0
 known_transactions = []
@@ -652,6 +628,16 @@ objects = []
 with open('objects.txt') as f:
     objects = [line.rstrip('\n') for line in f]
 
+client = None
+
+mainMenu = True
+startingGame = False
+shopping = False
+guessingGame = False
+
+transactionsList = []
+knownTransactionsIndex = 0
+TRANSACTIONS_PER_PAGE = 5
 number_known_objects = 0
 number_unknown_objects = 0
 known_objects = []
@@ -692,10 +678,12 @@ while run:
         while i < known_transactions.__len__():
             transaction = Transaction(known_transactions[i])
             transactionsList.append(transaction)
+            print(known_transactions[i])
             i += 1
 
         mainMenu = False
         startingGame = True
+
     elif startingGame:
         keys = pygame.key.get_pressed()
 
