@@ -50,30 +50,30 @@
   
 | item      | image                 | item     | image                | item       | image                  |
 |-----------+-----------------------+----------+----------------------+------------+------------------------|
-| biscuit   | [[./tiles/biscuit.png]]   | fish     | [[./tiles/fish.png]]     | mushroom   | [[./tiles/mushroom.png]]   |
-| burger    | [[./tiles/burger.png]]    | fruits   | [[./tiles/fruits.png]]   | pistachio  | [[./tiles/pistachio.png]]  |
-| cheese    | [[./tiles/cheese.png]]    | honey    | [[./tiles/honey.png]]    | pizza      | [[./tiles/pizza.png]]      |
-| chicken   | [[./tiles/chicken.png]]   | icecream | [[./tiles/icecream.png]] | shrimp     | [[./tiles/shrimp.png]]     |
-| chocolate | [[./tiles/chocolate.png]] | meat     | [[./tiles/meat.png]]     | soda       | [[./tiles/soda.png]]       |
-| croissant | [[./tiles/croissant.png]] | medicine | [[./tiles/medicine.png]] | sweets     | [[./tiles/sweets.png]]     |
-| egg       | [[./tiles/egg.png]]       | milk     | [[./tiles/milk.png]]     | vegetables | [[./tiles/vegetables.png]] |
+| biscuit   | [[./assets/items/biscuit.png]]   | fish     | [[./assets/items/fish.png]]     | mushroom   | [[./assets/items/mushroom.png]]   |
+| burger    | [[./assets/items/burger.png]]    | fruits   | [[./assets/items/fruits.png]]   | pistachio  | [[./assets/items/pistachio.png]]  |
+| cheese    | [[./assets/items/cheese.png]]    | honey    | [[./assets/items/honey.png]]    | pizza      | [[./assets/items/pizza.png]]      |
+| chicken   | [[./assets/items/chicken.png]]   | icecream | [[./assets/items/icecream.png]] | shrimp     | [[./assets/items/shrimp.png]]     |
+| chocolate | [[./assets/items/chocolate.png]] | meat     | [[./assets/items/meat.png]]     | soda       | [[./assets/items/soda.png]]       |
+| croissant | [[./assets/items/croissant.png]] | medicine | [[./assets/items/medicine.png]] | sweets     | [[./assets/items/sweets.png]]     |
+| egg       | [[./assets/items/egg.png]]       | milk     | [[./assets/items/milk.png]]     | vegetables | [[./assets/items/vegetables.png]] |
 
 * Tileset
   Credits : [[https://dribbble.com/grlmc][grlmc from Dribble]] 
   
-[[./tiles/tileset.png]]
+[[./assets/items/item_set.png]]
 
 * Sprites
   Made using [[http://www.mmorpgmakerxb.com/p/characters-sprites-generator][mmorpgmakerxb]]   
   
 | Character 1                           | Character 2                           | Character 3                           | Character 4                           |
 |---------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------|
-| [[./sprites/character_1/character_1.png]] | [[./sprites/character_2/character_2.png]] | [[./sprites/character_3/character_3.png]] | [[./sprites/character_4/character_4.png]] |
+| [[./assets/sprites/character_1/character_1.png]] | [[./assets/sprites/character_2/character_2.png]] | [[./assets/sprites/character_3/character_3.png]] | [[./assets/sprites/character_4/character_4.png]] |
  
 * Background
   Credits :  [[https://www.flickr.com/photos/_ladyamalthea_/][Lady Amalthea]]
 
-  [[./tiles/background.png]]
+  [[./assets/tiles/background.png]]
 
 * Music
   Credits : [[https://www.youtube.com/channel/UCNRFAB4ffkPODZd_PZQvgrw][Dj CUTMAN]]
