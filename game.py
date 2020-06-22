@@ -1,9 +1,7 @@
-import collections
 import random
-from random import choice, randint
-
+from first_window import First_window
+from draw_choice import Draw_choice
 import pygame
-
 from apriori import Apriori
 
 pygame.init()
@@ -290,10 +288,6 @@ class Client(object):
         self.right = False
         self.left = False
 
-class Player(object):
-    def __init__(self):
-        self.score = 0
-
 class Transaction(object):
     def __init__(self, itemsList):
         self.itemsList = itemsList
@@ -352,81 +346,18 @@ class Transaction(object):
         elif self.itemsList[i] == "vegetables":
             screen.blit(vegetables, (transaction_bgWidth*(i + 1) , row*self.rowHeight))
 
-
-# returns the number of common elements between two arrays
-def count(tab1, tab2):
-    count = 0
-    for i in range(0, len(tab1)):
-        for j in range(0, len(tab2)):
-            if tab1[i] == tab2[j] :
-                count+=1
-    return count
-
-# returns the index of the array which contains the most common elements
-def search_index(tab1, tab2):
-    index = randint(0, len(tab1)-1)
-    nbr_common_elements = 0
-    for i in range(0, len(tab1)):
-        nbr = count(tab1[i], tab2)
-        if(nbr > nbr_common_elements) :
-            nbr_common_elements = nbr
-            index = i
-    return index
-
-# returns the choice of the apriori algorithm
-def choice_apriori():
-    global known_objects
-    global choices
-    global antecedents
-    global consequents
-    index = search_index(antecedents, known_objects)
-    choice = search_index(choices, consequents[index])
-    return choice
-
 # draw the score
 def draw_score():
-    global score_player
-    global score_algo
     font = pygame.font.SysFont('Arial', 18)
     font.set_bold(True)
-    text3 = font.render('SCORE DU JOUEUR : '+str(score_player), False, (47,60,126), (251,234,235))
-    text4 = font.render("SCORE DE L'ALGORITHME APRIORI : "+str(score_algo), False, (47,60,126), (251,234,235))
+    text3 = font.render('SCORE DU JOUEUR : '+str(Draw_choice.score_player), False, (47,60,126), (251,234,235))
+    text4 = font.render("SCORE DE L'ALGORITHME APRIORI : "+str(Draw_choice.score_algo), False, (47,60,126), (251,234,235))
     screen.blit(text3, (50,50))
     screen.blit(text4, (50,80))
 
-# draw the bubbles and the text
-def draw_bubbles_text():
-    font = pygame.font.SysFont('Comic Sans MS', 25)
-    font.set_bold(True)
-    text1 = font.render('Le client a acheté :', False, (220,20,60), (255,250,205))
-    text2 = font.render("Deviner ce qu'il a acheté aussi :", False, (220,20,60), (255,250,205))
-    screen.blit(text1, (170, 120))
-    screen.blit(text2, (100, 345))
-    choice_image = pygame.image.load('assets/items/choice.png')
-    screen.blit(choice_image, (200, 150))
-    screen.blit(choice_image, (350, 370))
-    screen.blit(choice_image, (50, 370))
-
-# read the data
-def reading_data(difficulty):
-    global known_transactions
-    global unknown_transactions
-    # reading data from the known_transactions.txt
-    with open('difficulty/'+difficulty+'/known_transactions.txt') as f:
-        known_transactions_text = [line.rstrip('\n') for line in f] # transactions but with ','
-        for i in range(0, len(known_transactions_text)):
-            known_transactions.append(known_transactions_text[i].split(','))
-    random.shuffle(known_transactions) #Randomly mix the transactions
-    # reading data from the unknown_transactions.txt
-    with open('difficulty/'+difficulty+'/known_transactions.txt') as f:
-        unknown_transactions_text = [line.rstrip('\n') for line in f] # transactions but with ','
-        for i in range(0, len(unknown_transactions_text)):
-            unknown_transactions.append(unknown_transactions_text[i].split(','))
-    random.shuffle(unknown_transactions) #Randomly mix the transactions
-
 def redrawGameWindow():
     # draws background, character then foreground
-    global guessingGame
+    global num_transaction,unknown_transactions,guessingGame,objects,apriori
     clock.tick(20)
     screen.blit(background, (0, 0))
     if shopping or guessingGame:
@@ -435,7 +366,7 @@ def redrawGameWindow():
             screen.blit(foreground, (0, 0))
         draw_score()
         if guessingGame == True :
-            draw_choice()
+            Draw_choice.draw(screen,num_transaction,unknown_transactions,objects,apriori)
 
     if startingGame:
         screen.blit(startingGame_bg, (0, 0))
@@ -459,231 +390,40 @@ def display_known_transactions(index):
         else:
             break
 
-def draw_choice():
-    global num_transaction
-    global unknown_transactions
-    global number_known_objects
-    global number_unknown_objects
-    global known_objects
-    global unknown_objects
-    global choices
-    global is_drawn
-    global guessingGame
-    global right_choice_id
-    global left_circle
-    global right_circle
-    global score_algo
-    global score_player
-    global enchainement_player
-    global enchainement_algo
-    global score_is_calculated
-    global objects
-    transaction = unknown_transactions[num_transaction]
-    random.shuffle(transaction) #Randomly mix the transaction
-    # draw the bubbles of choices and text
-    draw_bubbles_text()
-    # distributes false and real objects
-    if is_drawn == False : # to avoid re-executing instructions multiple times
-        if len(transaction) > 4 :
-            number_known_objects = randint(len(transaction)-4,4)
-        else :
-            number_known_objects = randint(1, len(transaction)-1)
-        number_unknown_objects = len(transaction) - number_known_objects
-        known_objects = []
-        unknown_objects = []
-        for i in range(0, len(transaction)):
-            if(i<number_known_objects):
-                known_objects.append(transaction[i])
-            else:
-                unknown_objects.append(transaction[i])
-        false_choice = []
-        choices = []
-        # create the vector of possible choices
-        if(randint(0,10)<5): # here the true choice has the id=0 it means he's on the right
-            while True :
-                choices = []
-                false_choice = []
-                # add the right choice first
-                choices.append(unknown_objects)
-                right_choice_id = 0
-                # then randomly add another choice
-                for i in range(0, number_unknown_objects):
-                    false_choice.append(choice(objects))
-                choices.append(false_choice)
-                # the choices must be different
-                if collections.Counter(choices[0]) != collections.Counter(choices[1]) :
-                    break
-        else : # here the true choice has the id=1 it means he's on the left
-            while True :
-                false_choice = []
-                choices = []
-                # randomly add a wrong choice
-                for i in range(0, number_unknown_objects):
-                    false_choice.append(choice(objects))
-                choices.append(false_choice)
-                # then add the right choice
-                choices.append(unknown_objects)
-                right_choice_id = 1
-                # the choices must be different
-                if collections.Counter(choices[0]) != collections.Counter(choices[1]) :
-                    break
-        is_drawn = True
-
-    # calculate the score (only once that's why we use this condition)
-    if (right_circle or left_circle) and score_is_calculated == False :
-        if right_circle :
-            player_choice = 0
-        else :
-            player_choice = 1
-        old_score_player = score_player
-        if(player_choice == right_choice_id) :
-            if(enchainement_player == True):
-                score_player *= 2
-            else :
-                score_player += 20
-        if(old_score_player==score_player) :
-            enchainement_player = False
-        else :
-            enchainement_player = True
-        score_is_calculated = True
-        # The apriori algorithm guesses the shopping list
-        algo_choice = choice_apriori()
-        old_score_algo = score_algo
-        if(algo_choice == right_choice_id):
-            if(enchainement_algo == True):
-                score_algo *= 2
-            else :
-                score_algo += 20
-        if(old_score_algo==score_algo):
-            enchainement_algo = False
-        else :
-            enchainement_algo = True
-    # drawing the bubbles after the player chooses
-    if right_circle and right_choice_id == 0:
-        choice_image = pygame.image.load('assets/items/right_choice.png')
-        screen.blit(choice_image, (350, 370))
-    elif left_circle and right_choice_id == 1:
-        choice_image = pygame.image.load('assets/items/right_choice.png')
-        screen.blit(choice_image, (50, 370))
-    elif right_circle and right_choice_id == 1:
-        choice_image = pygame.image.load('assets/items/bad_choice.png')
-        screen.blit(choice_image, (350, 370))
-    elif left_circle and right_choice_id == 0:
-        choice_image = pygame.image.load('assets/items/bad_choice.png')
-        screen.blit(choice_image, (50, 370))
-    # put the objects in the bubbles :
-    # put the objects in the first bubble
-    for i in range(0, number_known_objects):
-        str = 'assets/items/'+known_objects[i]+'.png'
-        image_known_objects = pygame.image.load(str)
-        if i>=2 :
-            screen.blit(image_known_objects, (310, 180+70*(i-2)))
-        else :
-            screen.blit(image_known_objects, (240, 180+70*i))
-    # put the objects in the second bubble
-    for i in range(0, len(choices[0])):
-        str = 'assets/items/'+choices[0][i]+'.png'
-        image_known_objects = pygame.image.load(str)
-        if i>=2 :
-            screen.blit(image_known_objects, (455, 400+70*(i-2)))
-        else :
-            screen.blit(image_known_objects, (385, 400+70*i))
-    # put the objects in the third bubble
-    for i in range(0, len(choices[1])):
-        str = 'assets/items/'+choices[1][i]+'.png'
-        image_known_objects = pygame.image.load(str)
-        if i>=2 :
-            screen.blit(image_known_objects, (155, 400+70*(i-2)))
-        else :
-            screen.blit(image_known_objects, (85, 400+70*i))
-
 def guessing_game():
-    global client
-    global shopping
-    global guessingGame
-    global num_transaction
-    global is_drawn
-    global left_circle
-    global right_circle
-    global score_is_calculated
+    global client,shopping,guessingGame,num_transaction
     guessingGame = True
-    if left_circle or right_circle :
+    if Draw_choice.left_circle or Draw_choice.right_circle :
         client.leave_store()
         if (client.x, client.y) == (280, 600):
-            left_circle = False
-            right_circle = False
+            Draw_choice.left_circle = False
+            Draw_choice.right_circle = False
             guessingGame = False
             client = None  # to generate a new client and set a new path for him
             num_transaction += 1
-            is_drawn = False
-            score_is_calculated = False
+            Draw_choice.is_drawn = False
+            Draw_choice.score_is_calculated = False
             client = Client()
             guessingGame = False
             shopping = True
 
+first_window = First_window()
+known_transactions, unknown_transactions = [], []
+first_window.begin(screen, known_transactions, unknown_transactions)
 
-
-num_transaction = 0
-known_transactions = []
-unknown_transactions = []
-
-objects = []
+# Initialization of variables :
+client = None
+mainMenu, startingGame, shopping, guessingGame = True, False, False, False
+transactionsList = []
+knownTransactionsIndex, TRANSACTIONS_PER_PAGE, num_transaction = 0, 5, 0
+objects= []
 # reading data from the objects.txt
 with open('objects.txt') as f:
     objects = [line.rstrip('\n') for line in f]
-
-client = None
-
-mainMenu = True
-startingGame = False
-shopping = False
-guessingGame = False
-
-transactionsList = []
-knownTransactionsIndex = 0
-TRANSACTIONS_PER_PAGE = 5
-number_known_objects = 0
-number_unknown_objects = 0
-known_objects = []
-unknown_objects = []
-choices = []
-is_drawn = False
-right_choice_id = -1
-right_circle = False
-left_circle = False
-score_player = 0
-score_algo = 0
-enchainement_player = False
-enchainement_algo = False
-score_is_calculated = False
-
-# first window loop
-begin_game = False
-while begin_game == False:
-    background2 = pygame.image.load('assets/tiles/background2.png')
-    screen.blit(background2, (0, 0))
-    pygame.display.update()
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            exit()
-        elif event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos()
-            if 290<pos[0]<360 and 227<pos[1]<258:
-                # easy mode selected
-                reading_data('easy')
-                begin_game = True
-            elif 278<pos[0]<392 and 298<pos[1]<331:
-                # normal mode selected
-                reading_data('normal')
-                begin_game = True
-            elif 296<pos[0]<367 and 372<pos[1]<408:
-                # hard mode chosen
-                reading_data('hard')
-                begin_game = True
-
 client = Client()
 apriori = Apriori(known_transactions)
-antecedents, consequents = apriori.get_rules()
+antecedents, consequents = apriori.get_rules() # Rules building
+
 # main loop
 run = True
 while run:
@@ -696,10 +436,10 @@ while run:
                 pos = pygame.mouse.get_pos()
                 # check if the player has clicked on the right circle
                 if((pos[0] - 454)**2 + (pos[1] - 441)**2 < 93**2):
-                    right_circle = True
+                    Draw_choice.right_circle = True
                 # check if the player has clicked on the left circle
                 elif ((pos[0] - 153)**2 + (pos[1] - 441)**2 < 93**2):
-                    left_circle = True
+                    Draw_choice.left_circle = True
 
     if mainMenu:
         print("Main menu")
@@ -744,7 +484,6 @@ while run:
             break
 
     redrawGameWindow()
-
 
 # leave the game
 pygame.quit()
