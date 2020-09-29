@@ -13,7 +13,7 @@ class First_window :
                 known_transactions.append(known_transactions_text[i].split(','))
         random.shuffle(known_transactions) #Randomly mix the transactions
         # reading data from the unknown_transactions.txt
-        with open('difficulty/'+difficulty+'/known_transactions.txt') as f:
+        with open('difficulty/'+difficulty+'/unknown_transactions.txt') as f:
             unknown_transactions_text = [line.rstrip('\n') for line in f] # transactions but with ','
             for i in range(0, len(unknown_transactions_text)):
                 unknown_transactions.append(unknown_transactions_text[i].split(','))

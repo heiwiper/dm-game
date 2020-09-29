@@ -1,8 +1,10 @@
 import random
-from first_window import First_window
-from draw_choice import Draw_choice
+
 import pygame
+
 from apriori import Apriori
+from draw_choice import Draw_choice
+from first_window import First_window
 
 pygame.init()
 pygame.font.init()
@@ -372,12 +374,16 @@ def redrawGameWindow():
         screen.blit(startingGame_bg, (0, 0))
         display_known_transactions(knownTransactionsIndex)
 
+    if gameFinished:
+        screen.blit(startingGame_bg, (0, 0))
+        finishGame()
+
     pygame.display.update()
     clock.tick(30)
 
 def display_known_transactions(index):
     font = pygame.font.SysFont('Arial', 30)
-    text = font.render("Appuyez sur 'Espace' quand vous serai pret", False, (255,255,255))
+    text = font.render("Appuyez sur 'Espace' quand vous serez pret", False, (255,255,255))
     text_rect = text.get_rect()
     screen.blit(text, ((screenWidth/2 - text_rect.width/2, screenHeight - 100)))
     if not knownTransactionsIndex == 0:
@@ -407,13 +413,34 @@ def guessing_game():
             guessingGame = False
             shopping = True
 
+def finishGame():
+    font = pygame.font.SysFont('Arial', 30)
+    text2 = font.render('SCORE DU JOUEUR : '+str(Draw_choice.score_player), False, (255,255,255))
+    text_rect2 = text2.get_rect()
+    text3 = font.render("SCORE DE L'ALGORITHME APRIORI : "+str(Draw_choice.score_algo), False, (255,255,255))
+    text_rect3 = text3.get_rect()
+    if Draw_choice.score_player > Draw_choice.score_algo:
+        text = font.render("Vous avez gagné :)", False, (255,255,255))
+        text_rect = text.get_rect()
+        screen.blit(text, ((screenWidth/2 - text_rect.width/2, screenHeight/2 - text_rect.height/2)))
+    elif Draw_choice.score_player < Draw_choice.score_algo:
+        text = font.render("Vous avez perdu :(", False, (255,255,255))
+        text_rect = text.get_rect()
+        screen.blit(text, ((screenWidth/2 - text_rect.width/2, screenHeight/2 - text_rect.height/2)))
+    else:
+        text = font.render("égalité.", False, (255,255,255))
+        text_rect = text.get_rect()
+        screen.blit(text, ((screenWidth/2 - text_rect.width/2, screenHeight/2 - text_rect.height/2)))
+    screen.blit(text2, ((screenWidth/2 - text_rect2.width/2, screenHeight/2 - text_rect2.height/2 + 2*text_rect.height)))
+    screen.blit(text3, ((screenWidth/2 - text_rect3.width/2, screenHeight/2 - text_rect3.height/2 + 3*text_rect.height)))
+
 first_window = First_window()
 known_transactions, unknown_transactions = [], []
 first_window.begin(screen, known_transactions, unknown_transactions)
 
 # Initialization of variables :
 client = None
-mainMenu, startingGame, shopping, guessingGame = True, False, False, False
+mainMenu, startingGame, shopping, guessingGame, gameFinished = True, False, False, False, False
 transactionsList = []
 knownTransactionsIndex, TRANSACTIONS_PER_PAGE, num_transaction = 0, 5, 0
 objects= []
@@ -440,6 +467,9 @@ while run:
                 # check if the player has clicked on the left circle
                 elif ((pos[0] - 153)**2 + (pos[1] - 441)**2 < 93**2):
                     Draw_choice.left_circle = True
+            elif gameFinished:
+                gameFinished = False
+                mainMenu = True
 
     if mainMenu:
         print("Main menu")
@@ -481,7 +511,11 @@ while run:
         guessing_game()
         # transactions are completed
         if num_transaction > len(unknown_transactions)-1:
-            break
+            shopping = False
+            gameFinished = True
+    elif gameFinished:
+        finishGame()
+
 
     redrawGameWindow()
 
