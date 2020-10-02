@@ -1,6 +1,9 @@
+import sys
 from cx_Freeze import Executable, setup
 
 base = None
+if sys.platform == "win32":
+    base = "Win32GUI"
 
 setup(name="Data Mining Game",
 		 options={"build_exe":{"packages":["pygame","random","efficient_apriori","re","collections"],
